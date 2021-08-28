@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "Hacker News Get"
 version = "0.1.0"
-description = "See the top Hacker News posts."
-authors = ["Jordan <jsbmgcontact@protonmail.com>"]
+description = ""
+authors = ["Jordan Sweet <hello@jordandsweet.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
