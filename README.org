@@ -3,7 +3,7 @@
 A utility to view what's on Hacker News (https://news.ycombinator.com)
 from the terminal.
 
-*Commands*
+*** Commands
 
 =--fetch (-f)=
 
