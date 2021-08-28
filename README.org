@@ -21,3 +21,10 @@ Like --open, but go to the comments page(s) instead.
 =--best (-b)=
 
 View the top posts for the week instead of the current front page.
+
+*** Installation
+
+$ =git clone https://github.com/jsbmg/hnget=
+$ =cd hnget=
+$ =pip install . pyproject.toml=
+
