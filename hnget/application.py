@@ -67,9 +67,7 @@ def print_posts(html_tr):
         info_column = (
             f"{all_stories[idx].text_content()}"
             f" {Colors.OKBLUE}{all_domains[idx]}{Colors.ENDC}"
-            f"{Colors.OKGREEN}"
-            f" {all_num_comments[idx].text_content()}"
-            f"{Colors.ENDC}"
+            f" {Colors.OKGREEN}{all_num_comments[idx].text_content()}{Colors.ENDC}"
         )
         row = "{:<14}{}".format(index_column, info_column)
         print(row)
