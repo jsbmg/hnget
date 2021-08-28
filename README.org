@@ -1,4 +1,4 @@
-**hnget - Hacker News web scraper
+** hnget - Hacker News web scraper
 
 A utility to view what's on Hacker News (https://news.ycombinator.com)
 from the terminal.
