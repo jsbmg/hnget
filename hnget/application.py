@@ -23,14 +23,6 @@ def html_tree(url):
     return tree
 
 
-def links(html_tr):
-    return html_tr.xpath("//a[@class='storylink']/@href")
-
-
-def stories(html_tr):
-    return html_tr.xpath("//a[@class='storylink']")
-
-
 def comments(html_tr):
     base_url = "https://news.ycombinator.com/"
     elements = html_tr.xpath("//td[@class='subtext']/a[last()]")
@@ -38,12 +30,20 @@ def comments(html_tr):
     return elements_hrefs
 
 
+def domains(html_tr):
+    return html_tr.xpath("//span[@class='sitestr']")
+
+
+def links(html_tr):
+    return html_tr.xpath("//a[@class='storylink']/@href")
+
+
 def num_comments(html_tr):
     return html_tr.xpath("//td[@class='subtext']/a[last()]")
 
 
-def domains(html_tr):
-    return html_tr.xpath("//span[@class='sitestr']")
+def stories(html_tr):
+    return html_tr.xpath("//a[@class='storylink']")
 
 
 def print_posts(html_tr):
