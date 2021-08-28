@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "Hacker News Get"
+name = "hnget"
 version = "0.1.0"
-description = ""
+description = "Shows and opens links on Hacker news from the terminal"
 authors = ["Jordan Sweet <hello@jordandsweet.com>"]
 
 [tool.poetry.dependencies]
