@@ -52,6 +52,10 @@ def print_posts(html_tr):
     all_num_comments = num_comments(html_tr)
     all_links = links(html_tr)
     for idx in range(30):
+        if (
+            len(all_domains) < idx + 1
+        ):  # can occur if final story is a self post
+            all_domains.insert(idx, "news.ycombinator.com")
         # Show HN, etc. posts do not display a domain, therefore we give
         # them one manually
         if not all_domains[idx].text_content() in all_links[idx]:
