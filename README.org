@@ -5,20 +5,20 @@ from the terminal.
 
 *** Commands
 
-=--fetch (-f)=
+=--fetch (--f)=
 
 Print the top 30 posts on Hacker News, enumerated.
 
-=--open (-o)=
+=--open (--o) [NUMS...]=
 
 Open story link(s) in the default webbrowser. Multiple values are
 accepted.
 
-=--comments (-o)=
+=--comments (--o) [NUMS...]=
 
 Like --open, but go to the comments page(s) instead.
 
-=--best (-b)=
+=--best (--b)=
 
 View the top posts for the week instead of the current front page.
 
