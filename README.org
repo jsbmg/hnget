@@ -1,0 +1,23 @@
+**hnget - Hacker News web scraper
+
+A utility to view what's on Hacker News (https://news.ycombinator.com)
+from the terminal.
+
+*Commands*
+
+=--fetch (-f)=
+
+Print the top 30 posts on Hacker News, enumerated.
+
+=--open (-o)=
+
+Open story link(s) in the default webbrowser. Multiple values are
+accepted.
+
+=--comments (-o)=
+
+Like --open, but go to the comments page(s) instead.
+
+=--best (-b)=
+
+View the top posts for the week instead of the current front page.
