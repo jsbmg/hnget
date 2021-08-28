@@ -44,10 +44,10 @@ def print_posts(html_tr):
     all_num_comments = num_comments(html_tr)
     all_links = links(html_tr)
     for idx in range(30):
-        # 'self' posts do not display domain names, therefore the must
-        # be inserted manually
+        # Show HN, etc. posts do not display a domain, therefore we give
+        # them one manually
         if not all_domains[idx].text_content() in all_links[idx]:
-            all_domains.insert(idx, "self")
+            all_domains.insert(idx, "news.ycombinator.com")
         else:
             all_domains[idx] = all_domains[idx].text_content()
 
