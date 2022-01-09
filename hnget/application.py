@@ -35,7 +35,7 @@ def domains(html_tr):
 
 
 def links(html_tr):
-    return html_tr.xpath("//a[@class='storylink']/@href")
+    return html_tr.xpath("//a[@class='titlelink']/@href")
 
 
 def num_comments(html_tr):
@@ -43,7 +43,7 @@ def num_comments(html_tr):
 
 
 def stories(html_tr):
-    return html_tr.xpath("//a[@class='storylink']")
+    return html_tr.xpath("//a[@class='titlelink']")
 
 
 def print_posts(html_tr):
@@ -51,6 +51,7 @@ def print_posts(html_tr):
     all_domains = domains(html_tr)
     all_num_comments = num_comments(html_tr)
     all_links = links(html_tr)
+    print(len(all_stories), len(all_links))
     for idx in range(30):
         if (
             len(all_domains) < idx + 1
