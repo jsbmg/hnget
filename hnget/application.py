@@ -1,4 +1,5 @@
 import argparse
+import sys
 import webbrowser
 
 from lxml.html import fromstring
@@ -108,6 +109,11 @@ def init_argparse() -> argparse.ArgumentParser:
 def main():
     url = "https://news.ycombinator.com"
     parser = init_argparse()
+
+    if len(sys.argv) < 2:
+        parser.print_help()
+        sys.exit(1)
+
     args = parser.parse_args()
 
     if args.best:
