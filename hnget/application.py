@@ -75,6 +75,8 @@ def print_posts(html_tr):
 
 def open_url(entry, urls):
     entry = int(entry) - 1
+    if urls[entry].startswith("item?id="):
+        urls[entry] = "news.ycombinator.com/" + urls[entry]
     webbrowser.open(urls[entry])
 
 
