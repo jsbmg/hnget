@@ -69,12 +69,18 @@ def print_posts(html_tr):
                 d.insert(idx, "news.ycombinator.com")
             else:
                 d[idx] = d[idx].text_content()
+            
+            # Posts with no comments are displayed in the browser as 'hide'
+            # Change that to '0 commnets' here
+            n[idx] = n[idx].text_content()
+            if n[idx] == "hide":
+                n[idx] = "0 comments"
 
             index_col = f"{Colors.OKCYAN}[{idx+1}]{Colors.ENDC}"
             info_col = (
                 f"{s[idx].text_content()}"
                 f" {Colors.OKBLUE}{d[idx]}{Colors.ENDC}"
-                f" {Colors.OKGREEN}{n[idx].text_content()}{Colors.ENDC}"
+                f" {Colors.OKGREEN}{n[idx]}{Colors.ENDC}"
             )
             row = "{:<14}{}".format(index_col, info_col)
             f.write(l[idx] + " " + c[idx] + "\n")
