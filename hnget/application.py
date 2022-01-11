@@ -63,7 +63,7 @@ def print_posts(html_tr):
     with open(CACHE, 'w') as f:
         for idx in range(30):
             # Discussion posts don't have a domain link, but they
-            # all start with 'item?ed=' so this detects that and
+            # all start with 'item?id=' so this detects that and
             # inserts the Hacker News domain. 
             if l[idx].startswith("item?id="):
                 d.insert(idx, "news.ycombinator.com")
@@ -147,6 +147,7 @@ def main():
     run_hnget(args)
 
     return 0 
+
 
 if __name__ == "__main__":
     sys.exit(main())
