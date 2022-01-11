@@ -17,7 +17,7 @@ accepted. Default web browser can be set with `$BROWSER`.
 
 Like `--open`, but view the comment page(s) instead.
 
-`hnget --fetch --best (--b)`
+`hnget --best`
 
 View the top posts for the week instead of the current front page.
 

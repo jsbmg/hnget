@@ -1,10 +1,17 @@
 import argparse
+import os
 import sys
 import webbrowser
 
 from lxml.html import fromstring
+from pathlib import Path 
 from requests import get
 
+URL = "https://news.ycombinator.com"
+DIR = os.path.join(Path.home(), ".cache", "hnget")
+CACHE = os.path.join(DIR, "links")
+
+os.makedirs(DIR, exist_ok=True)
 
 class Colors:
     BOLD = "\033[1m"
@@ -23,62 +30,69 @@ def html_tree(url):
     tree = fromstring(content.text)
     return tree
 
-
 def comments(html_tr):
     base_url = "https://news.ycombinator.com/"
     elements = html_tr.xpath("//td[@class='subtext']/a[last()]")
     elements_hrefs = [base_url + e.get("href") for e in elements]
     return elements_hrefs
 
-
 def domains(html_tr):
     return html_tr.xpath("//span[@class='sitestr']")
 
-
 def links(html_tr):
-    return html_tr.xpath("//a[@class='titlelink']/@href")
-
+    links = html_tr.xpath("//a[@class='titlelink']/@href")
+    # make relative links absolute 
+    for x in links:
+        if x.startswith("item?id="):
+            x = "https://news.ycombinator.com" + x 
+    return links            
 
 def num_comments(html_tr):
     return html_tr.xpath("//td[@class='subtext']/a[last()]")
 
-
 def stories(html_tr):
     return html_tr.xpath("//a[@class='titlelink']")
 
-
 def print_posts(html_tr):
-    all_stories = stories(html_tr)
-    all_domains = domains(html_tr)
-    all_num_comments = num_comments(html_tr)
-    all_links = links(html_tr)
-    for idx in range(30):
-        if (
-            len(all_domains) < idx + 1
-        ):  # can occur if final story is a self post
-            all_domains.insert(idx, "news.ycombinator.com")
-        # Hacker News' "self posts" don't have a domain,  
-        # so give them news.ycombinator.com 
-        if all_links[idx].startswith("item?id="):
-            all_domains.insert(idx, "news.ycombinator.com")
-        else:
-            all_domains[idx] = all_domains[idx].text_content()
+    c = comments(html_tr)
+    d = domains(html_tr)
+    l = links(html_tr)
+    n = num_comments(html_tr)
+    s = stories(html_tr)
 
-        index_column = f"{Colors.OKCYAN}[{idx+1}]{Colors.ENDC}"
-        info_column = (
-            f"{all_stories[idx].text_content()}"
-            f" {Colors.OKBLUE}{all_domains[idx]}{Colors.ENDC}"
-            f" {Colors.OKGREEN}{all_num_comments[idx].text_content()}{Colors.ENDC}"
-        )
-        row = "{:<14}{}".format(index_column, info_column)
-        print(row)
+    with open(CACHE, 'w') as f:
+        for idx in range(30):
+            # Discussion posts don't have a domain link, but they
+            # all start with 'item?ed=' so this detects that and
+            # inserts the Hacker News domain. 
+            if l[idx].startswith("item?id="):
+                d.insert(idx, "news.ycombinator.com")
+            else:
+                d[idx] = d[idx].text_content()
+
+            index_col = f"{Colors.OKCYAN}[{idx+1}]{Colors.ENDC}"
+            info_col = (
+                f"{s[idx].text_content()}"
+                f" {Colors.OKBLUE}{d[idx]}{Colors.ENDC}"
+                f" {Colors.OKGREEN}{n[idx].text_content()}{Colors.ENDC}"
+            )
+            row = "{:<14}{}".format(index_col, info_col)
+            f.write(l[idx] + " " + c[idx] + "\n")
+            print(row)
 
 
-def open_url(entry, urls):
-    entry = int(entry) - 1
-    if urls[entry].startswith("item?id="):
-        urls[entry] = "news.ycombinator.com/" + urls[entry]
-    webbrowser.open(urls[entry])
+def open_urls(indices, comments):
+    if comments:
+        col = 1
+    else:
+        col = 0
+    with open(CACHE, 'r') as f:
+        content = f.readlines()
+        for idx in indices:
+            # convert 1-indexed input to 0-indexed 
+            idx = int(idx) - 1
+            link = content[idx].split()[col]
+            webbrowser.open(link)
 
 
 def init_argparse() -> argparse.ArgumentParser:
@@ -105,9 +119,23 @@ def init_argparse() -> argparse.ArgumentParser:
 
     return parser
 
+def run_hnget(args):
+    if args.best:
+        global URL
+        URL = URL + "/best"
+        args.fetch = True 
+
+    if args.fetch:
+        html_tr = html_tree(URL)
+        print_posts(html_tr)
+
+    if args.open:
+        open_urls(args.open, False)
+
+    if args.comments:
+        open_urls(args.comments, True)
 
 def main():
-    url = "https://news.ycombinator.com"
     parser = init_argparse()
 
     if len(sys.argv) < 2:
@@ -116,23 +144,9 @@ def main():
 
     args = parser.parse_args()
 
-    if args.best:
-        url = url + "/best"
-    html_tr = html_tree(url)
+    run_hnget(args)
 
-    if args.fetch:
-        print_posts(html_tr)
-
-    if args.open:
-        urls = links(html_tr)
-        for entry in args.open:
-            open_url(entry, urls)
-
-    if args.comments:
-        urls = comments(html_tr)
-        for entry in args.comments:
-            open_url(entry, urls)
-
+    return 0 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
