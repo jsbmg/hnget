@@ -4,7 +4,7 @@ import sys
 import webbrowser
 
 from lxml.html import fromstring
-from pathlib import Path 
+from pathlib import Path
 from requests import get
 
 URL = "https://news.ycombinator.com"
@@ -41,11 +41,11 @@ def domains(html_tr):
 
 def links(html_tr):
     links = html_tr.xpath("//a[@class='titlelink']/@href")
-    # make relative links absolute 
+    # make relative links absolute
     for x in links:
         if x.startswith("item?id="):
-            x = "https://news.ycombinator.com" + x 
-    return links            
+            x = "https://news.ycombinator.com" + x
+    return links
 
 def num_comments(html_tr):
     return html_tr.xpath("//td[@class='subtext']/a[last()]")
@@ -53,7 +53,10 @@ def num_comments(html_tr):
 def stories(html_tr):
     return html_tr.xpath("//a[@class='titlelink']")
 
-def print_posts(html_tr):
+def print_posts(html_tr, wrap):
+    term_width = os.get_terminal_size()[0]
+    print(term_width)
+
     c = comments(html_tr)
     d = domains(html_tr)
     l = links(html_tr)
@@ -64,25 +67,34 @@ def print_posts(html_tr):
         for idx in range(30):
             # Discussion posts don't have a domain link, but they
             # all start with 'item?id=' so this detects that and
-            # inserts the Hacker News domain. 
+            # inserts the Hacker News domain.
             if l[idx].startswith("item?id="):
                 d.insert(idx, "news.ycombinator.com")
             else:
                 d[idx] = d[idx].text_content()
-            
+
             # Posts with no comments are displayed in the browser as 'hide'
             # Change that to '0 commnets' here
             n[idx] = n[idx].text_content()
             if n[idx] == "hide":
                 n[idx] = "0 comments"
 
+            s[idx] = s[idx].text_content() 
+
+            if not wrap:
+                row_len = 7 + len(s[idx]) + len(d[idx]) + len(n[idx])
+                if row_len > term_width:
+                    offset = row_len + 3 - term_width 
+                    s[idx] = s[idx][:-offset] + "..."
+
             index_col = f"{Colors.OKCYAN}[{idx+1}]{Colors.ENDC}"
             info_col = (
-                f"{s[idx].text_content()}"
+                f"{s[idx]}"
                 f" {Colors.OKBLUE}{d[idx]}{Colors.ENDC}"
                 f" {Colors.OKGREEN}{n[idx]}{Colors.ENDC}"
             )
             row = "{:<14}{}".format(index_col, info_col)
+
             f.write(l[idx] + " " + c[idx] + "\n")
             print(row)
 
@@ -95,7 +107,7 @@ def open_urls(indices, comments):
     with open(CACHE, 'r') as f:
         content = f.readlines()
         for idx in indices:
-            # convert 1-indexed input to 0-indexed 
+            # convert 1-indexed input to 0-indexed
             idx = int(idx) - 1
             link = content[idx].split()[col]
             webbrowser.open(link)
@@ -122,6 +134,11 @@ def init_argparse() -> argparse.ArgumentParser:
         action="store_true",
         help="list the best stories of the week",
     )
+    parser.add_argument(
+        "--wrap",
+        action="store_true",
+        help="wrap instead of truncate long lines"
+    )
 
     return parser
 
@@ -136,9 +153,9 @@ def run_hnget(args):
             URL += f"/news"
 
         URL += f"?p={args.fetch}"
-            
+
         html_tr = html_tree(URL)
-        print_posts(html_tr)
+        print_posts(html_tr, args.wrap)
 
     if args.open:
         open_urls(args.open, False)
@@ -157,7 +174,7 @@ def main():
 
     run_hnget(args)
 
-    return 0 
+    return 0
 
 
 if __name__ == "__main__":
