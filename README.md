@@ -2,7 +2,7 @@
 
 A commandline program for browsing [Hacker News](https://news.ycombinator.com).
 
-![Alt text](/extras/screenshot.png?raw=true "hnget screenshot")
+![Alt text](/extras/screen.png?raw=true "hnget screenshot")
 
 ## Usage 
 
