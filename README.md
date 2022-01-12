@@ -6,7 +6,7 @@ A commandline program for browsing [Hacker News](https://news.ycombinator.com).
 
 `hnget --fetch (--f)`
 
-Print the top 30 posts on Hacker News, enumerated.
+Print the top 30 posts on Hacker News, enumerated. `--fetch` takes an optional integer value to specify different pages of the results. 
 
 `hnget --open (--o) [NUMS...]`
 
@@ -17,7 +17,7 @@ accepted. Default web browser can be set with `$BROWSER`.
 
 Like `--open`, but view the comment page(s) instead.
 
-`hnget --best`
+`hnget --fetch --best`
 
 View the top posts for the week instead of the current front page.
 

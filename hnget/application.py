@@ -107,7 +107,7 @@ def init_argparse() -> argparse.ArgumentParser:
         description="View current stories on Hacker News.",
     )
     parser.add_argument(
-        "--fetch", action="store_true", help="list stories on the front page"
+        "--fetch", type=int, const=1, nargs='?', help="list stories on the front page"
     )
     parser.add_argument(
         "--open", nargs="+", help="open story link(s) in default webbrowser"
@@ -120,18 +120,23 @@ def init_argparse() -> argparse.ArgumentParser:
     parser.add_argument(
         "--best",
         action="store_true",
-        help="pull from the best stories of the week",
+        help="list the best stories of the week",
     )
 
     return parser
 
 def run_hnget(args):
-    if args.best:
-        global URL
-        URL = URL + "/best"
-        args.fetch = True 
 
     if args.fetch:
+        global URL
+
+        if args.best:
+            URL += f"/best"
+        else:
+            URL += f"/news"
+
+        URL += f"?p={args.fetch}"
+            
         html_tr = html_tree(URL)
         print_posts(html_tr)
 
