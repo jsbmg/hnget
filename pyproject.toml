@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hnget"
-version = "0.1.5"
+version = "0.1.6"
 description = "Shows and opens links on Hacker news from the terminal"
 authors = ["Jordan Sweet <hello@jordandsweet.com>"]
 readme = "README.md"
