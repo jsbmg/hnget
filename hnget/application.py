@@ -78,12 +78,12 @@ def print_posts(html_tr, wrap):
             if n[idx] == "hide":
                 n[idx] = "0 comments"
 
-            s[idx] = s[idx].text_content() 
+            s[idx] = s[idx].text_content()
 
             if not wrap:
                 row_len = 7 + len(s[idx]) + len(d[idx]) + len(n[idx])
                 if row_len > term_width:
-                    offset = row_len + 3 - term_width 
+                    offset = row_len + 3 - term_width
                     s[idx] = s[idx][:-offset] + "..."
 
             index_col = f"{Colors.OKCYAN}[{idx+1}]{Colors.ENDC}"
@@ -118,7 +118,8 @@ def init_argparse() -> argparse.ArgumentParser:
         description="View current stories on Hacker News.",
     )
     parser.add_argument(
-        "--fetch", type=int, const=1, nargs='?', help="list stories on the front page"
+        "--fetch",
+        type=int, const=1, nargs='?', help="list stories on the front page"
     )
     parser.add_argument(
         "--open", nargs="+", help="open story link(s) in default webbrowser"
@@ -138,11 +139,9 @@ def init_argparse() -> argparse.ArgumentParser:
         action="store_true",
         help="wrap instead of truncate long lines"
     )
-
     return parser
 
 def run_hnget(args):
-
     if args.fetch:
         global URL
 
