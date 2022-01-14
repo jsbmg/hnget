@@ -55,7 +55,6 @@ def stories(html_tr):
 
 def print_posts(html_tr, wrap):
     term_width = os.get_terminal_size()[0]
-    print(term_width)
 
     c = comments(html_tr)
     d = domains(html_tr)
