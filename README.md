@@ -2,13 +2,13 @@
 
 A commandline program for browsing [Hacker News](https://news.ycombinator.com).
 
-![Alt text](/extras/screen.png?raw=true "hnget screenshot")
+![Hnget Screenshot](/extras/screen.png)
 
-## Usage 
+## Usage
 
 `hnget --fetch (--f)`
 
-Print the top 30 posts on Hacker News, enumerated. `--fetch` takes an optional integer value to specify different pages of the results. 
+Print the top 30 posts on Hacker News, enumerated. `--fetch` takes an optional integer value to specify different pages of the results.
 
 `hnget --open (--o) [NUMS...]`
 
