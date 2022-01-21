@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 import sys
 import webbrowser
 
@@ -72,11 +73,10 @@ def print_posts(html_tr, wrap):
             else:
                 d[idx] = d[idx].text_content()
 
-            # Posts with no comments are displayed in the browser as 'hide'
-            # Change that to '0 commnets' here
-            n[idx] = n[idx].text_content()
-            if n[idx] == "hide":
-                n[idx] = "0 comments"
+            # Strip everything from comments count except the number
+            n[idx] = re.sub("\D*", "", n[idx].text_content())
+            if not n[idx]:
+                n[idx] = "0"
 
             s[idx] = s[idx].text_content()
 
@@ -86,13 +86,13 @@ def print_posts(html_tr, wrap):
                     offset = row_len + 3 - term_width
                     s[idx] = s[idx][:-offset] + "..."
 
-            index_col = f"{Colors.OKCYAN}[{idx+1}]{Colors.ENDC}"
-            info_col = (
+            index_col = f"{Colors.OKCYAN}{idx+1}{Colors.ENDC}"
+            txt_col = (
                 f"{s[idx]}"
                 f" {Colors.OKBLUE}{d[idx]}{Colors.ENDC}"
                 f" {Colors.OKGREEN}{n[idx]}{Colors.ENDC}"
             )
-            row = "{:<14}{}".format(index_col, info_col)
+            row = "{:<12}{}".format(index_col, txt_col)
 
             f.write(l[idx] + " " + c[idx] + "\n")
             print(row)
@@ -141,7 +141,7 @@ def init_argparse() -> argparse.ArgumentParser:
     )
     return parser
 
-def run_hnget(args):
+def run(args):
     if args.fetch:
         global URL
 
@@ -170,7 +170,7 @@ def main():
 
     args = parser.parse_args()
 
-    run_hnget(args)
+    run(args)
 
     return 0
 
