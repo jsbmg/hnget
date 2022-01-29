@@ -106,6 +106,15 @@ def open_urls(indices, comments):
     with open(CACHE, 'r') as f:
         content = f.readlines()
         for idx in indices:
+            try:
+                int(idx)
+            except ValueError:
+                print(f"{idx}: Not an integer")
+                continue
+            if not 0 < int(idx) <= 30:
+                print(f"{idx}: Not in range 1-30")
+                continue
+
             # convert 1-indexed input to 0-indexed
             idx = int(idx) - 1
             link = content[idx].split()[col]
