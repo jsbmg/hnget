@@ -43,9 +43,9 @@ def domains(html_tr):
 def links(html_tr):
     links = html_tr.xpath("//a[@class='titlelink']/@href")
     # make relative links absolute
-    for x in links:
+    for idx, x in enumerate(links):
         if x.startswith("item?id="):
-            x = "https://news.ycombinator.com" + x
+            links[idx] = "https://news.ycombinator.com/" + x
     return links
 
 def num_comments(html_tr):
@@ -68,7 +68,7 @@ def print_posts(html_tr, wrap):
             # Discussion posts don't have a domain link, but they
             # all start with 'item?id=' so this detects that and
             # inserts the Hacker News domain.
-            if l[idx].startswith("item?id="):
+            if l[idx].startswith("https://news.ycombinator.com/item?id="):
                 d.insert(idx, "news.ycombinator.com")
             else:
                 d[idx] = d[idx].text_content()
